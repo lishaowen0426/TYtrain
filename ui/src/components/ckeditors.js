@@ -12,7 +12,7 @@
 //     handleEditorChange = (event, editor) => {
 //         const data = editor.getData();
 //         console.log({ event, editor, data });
-        
+
 //         // 将数据传递回页面A
 //         if (this.props.onDataChanged) {
 //             this.props.onDataChanged(data);
@@ -47,13 +47,13 @@
 
 // export default MyEditor;
 import React, { Component } from 'react';
-import Editor from '../ckeditor5/build/ckeditor';
+import Editor from '../ckeditor.js';
 import { CKEditor } from '@ckeditor/ckeditor5-react';
 
 import '../css/ckeditors.css';
 
 const editorConfiguration = {
-   height: 400 // 设置您希望的高度，例如 400px
+    height: 400 // 设置您希望的高度，例如 400px
 };
 
 class MyEditor extends Component {
@@ -78,19 +78,19 @@ class MyEditor extends Component {
         return (
             <div className="App">
                 <CKEditor
-                    editor={ Editor }
-                    config={ editorConfiguration }
+                    editor={Editor}
+                    config={editorConfiguration}
                     data={this.props.initialValue} // 使用初期值
-                    onReady={ editor => {
-                        console.log( 'Editor is ready to use!', editor );
-                    } }
-                    onChange={ this.handleEditorChange }
-                    onBlur={ ( event, editor ) => {
-                        console.log( 'Blur.', editor );
-                    } }
-                    onFocus={ ( event, editor ) => {
-                        console.log( 'Focus.', editor );
-                    } }
+                    onReady={editor => {
+                        console.log('Editor is ready to use!', editor);
+                    }}
+                    onChange={this.handleEditorChange}
+                    onBlur={(event, editor) => {
+                        console.log('Blur.', editor);
+                    }}
+                    onFocus={(event, editor) => {
+                        console.log('Focus.', editor);
+                    }}
                 />
             </div>
         );
