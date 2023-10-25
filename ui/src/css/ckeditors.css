@@ -1,0 +1,7 @@
+.editor-container .form-control, 
+.editor-container MyEditor { 
+    height: 400px; 
+}
+.ck-editor__editable {
+  height: 400px;
+}
