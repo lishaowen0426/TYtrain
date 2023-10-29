@@ -19,5 +19,13 @@ services:
     ports:
       - "${ADMINER_PORT}:${ADMINER_PORT}"
 
+  cache:
+    container_name: redis_cache
+    image: redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:${REDIS_PORT}"
+    command: redis-server --requirepass ${REDIS_PASSWORD} 
+
 volumes:
   db:

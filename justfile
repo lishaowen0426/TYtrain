@@ -15,3 +15,6 @@ db-prune:
 
 css:
     @npx tailwindcss -c ./ui/tailwind.config.js -i ./ui/src/index.css -o ./ui/public/output.css 
+
+who port:
+    sudo lsof -i -P | grep LISTEN | grep :{{port}}
