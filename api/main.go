@@ -4,11 +4,13 @@ import (
 	"net/http"
 	"os"
 	"path"
+	"time"
 
 	"api/cache"
 	"api/db"
 	"api/route/auth"
 
+	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
 	"github.com/subosito/gotenv"
 )
@@ -25,6 +27,12 @@ func main() {
 	cache.Connect()
 
 	r := gin.Default()
+
+	// Permit CORS to all
+	cors_config := cors.DefaultConfig()
+	cors_config.MaxAge = 10 * time.Minute
+	cors_config.AllowAllOrigins = true
+	r.Use(cors.New(cors_config))
 
 	api := r.Group("/api")
 

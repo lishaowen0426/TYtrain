@@ -125,7 +125,6 @@ func Login(c *gin.Context) {
 		// token exists
 		jwtToken = token
 	}
-
 	c.JSON(http.StatusOK, apiresponse.NewSuccess(gin.H{"token": jwtToken}))
 }
 
