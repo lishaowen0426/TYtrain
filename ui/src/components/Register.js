@@ -21,6 +21,7 @@ import FormControlLabel from "@mui/material/FormControlLabel";
 import Checkbox from "@mui/material/Checkbox";
 import SendIcon from "@mui/icons-material/Send";
 import { Menu } from "@mui/material";
+import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 const StandardInputItem = props => <TextField {...props} variant="standard" />;
 
@@ -86,7 +87,7 @@ const Register = () => {
           justifyContent: "flex-start",
         }}
       >
-        <Avatar alt="male" src={MaleAvatar} sx={{ flex: 4, width: "100%" }} />
+        <AccountCircleIcon sx={{ flex: 4, width: "100%" }} />
         <Button
           variant="outlined"
           startIcon={<CloudUploadIcon />}
@@ -98,7 +99,7 @@ const Register = () => {
       <Box
         sx={{
           flex: 4,
-          width: "50%",
+          width: "30%",
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
