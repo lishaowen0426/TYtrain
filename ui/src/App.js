@@ -39,6 +39,7 @@ import KnowledgeInput from './components/KnowledgeInput';
 import KnowledgeImport from './components/KnowledgeImport';
 import Interview from './components/interview';
 import KnowledgeManage from './components/KnowledgeManage';
+import KnowledgeRoute from './components/knowledgeRoute';
 
 function App() {
   return (
@@ -51,6 +52,7 @@ function App() {
         <Route path="/knowledgeInput/:guid" element={<KnowledgeInput />} />
         <Route path="/KnowledgeImport" element={<KnowledgeImport />} />
         <Route path="/KnowledgeManage" element={<KnowledgeManage />} />
+        <Route path="/KnowledgeRoute" element={<KnowledgeRoute />} />
       
       </Routes>
     </Router>
