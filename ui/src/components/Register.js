@@ -41,11 +41,11 @@ const SchoolList = () => {
 
 const useStateWithError = initialValue => {
   const [state, setState] = React.useState(initialValue);
-  const [error, setError] = React.useState(false);
+  const [err, setError] = React.useState(false);
   return {
     setError,
     reset: () => setState(initialValue),
-    state,
+    value: state,
     error,
     onChange: e => {
       setState(e.target.value);
@@ -109,38 +109,38 @@ const Register = () => {
 
   const validateInput = () => {
     let valid = true;
-    if (firstnameProps.state.length == 0) {
+    if (firstnameProps.value.length == 0) {
       setFirstnameError(true);
       valid = false;
     } else {
       setFirstnameError(false);
     }
-    if (lastnameProps.state.length == 0) {
+    if (lastnameProps.value.length == 0) {
       setLastnameError(true);
       valid = false;
     } else {
       setLastnameError(false);
     }
-    if (telProps.state.length == 0) {
+    if (telProps.value.length == 0) {
       setTelError(true);
       valid = false;
     } else {
       setTelError(false);
     }
-    if (passwordProps.state.length == 0) {
+    if (passwordProps.value.length == 0) {
       setPasswordError(true);
       valid = false;
     } else {
       setPasswordError(false);
     }
-    if (schoolProps.state == 0) {
+    if (schoolProps.value == 0) {
       setSchoolError(true);
       valid = false;
     } else {
       setSchoolError(false);
     }
 
-    if (!consentProps.state) {
+    if (!consentProps.value) {
       setConsentError(true);
       valid = false;
     } else {
@@ -152,14 +152,16 @@ const Register = () => {
 
   const onSubmit = () => {
     if (validateInput()) {
-      registrationData = {
-        lastname: lastnameProps.state,
-        firstname: firstnameProps.state,
-        tel: telProps.state,
-        school: schoolProps.state,
-        email: emailProps.state,
-        password: passwordProps.state,
+      const registrationData = {
+        lastname: lastnameProps.value,
+        firstname: firstnameProps.value,
+        tel: telProps.value,
+        school: schoolProps.value,
+        email: emailProps.value,
+        password: passwordProps.value,
       };
+
+      console.log(registrationData);
     }
   };
 
