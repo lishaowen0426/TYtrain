@@ -13,7 +13,11 @@ import KnowledgeImport from "./components/KnowledgeImport";
 import Interview from "./components/interview";
 import KnowledgeManage from "./components/KnowledgeManage";
 import { CssBaseline, ThemeProvider } from "@mui/material";
+import Homepage from "./components/Homepage";
 import Theme from "./theme/theme";
+import "animate.css";
+import "./css/Register.css";
+import "./App.css";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -31,7 +35,7 @@ function App() {
 function Root() {
   return (
     <Routes>
-      <Route path="/" element={<Login />} />
+      <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
       <Route path="/knowledge" element={<Knowledge />} />

@@ -1,5 +1,5 @@
 build/
 dist/
 node_modules/
-static/**
+static/
 .DS_Store

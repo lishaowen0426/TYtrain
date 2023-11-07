@@ -4,7 +4,6 @@ import Container from "@mui/material/Container";
 import Box from "@mui/material/Box";
 import Typography from "@mui/material/Typography";
 import Avatar from "@mui/material/Avatar";
-import MaleAvatar from "../static/images/male.png";
 import IconButton from "@mui/material/IconButton";
 import { styled } from "@mui/material/styles";
 import ButtonBase from "@mui/material/ButtonBase";
@@ -41,7 +40,7 @@ const SchoolList = () => {
 
 const useStateWithError = initialValue => {
   const [state, setState] = React.useState(initialValue);
-  const [err, setError] = React.useState(false);
+  const [error, setError] = React.useState(false);
   return {
     setError,
     reset: () => setState(initialValue),
@@ -65,47 +64,57 @@ const HiddenInput = styled("input")({
   width: 1,
 });
 
-const Register = () => {
+const Register1 = () => {
   const fileRef = React.useRef();
-  const {
-    reset: resetFirstname,
-    setError: setFirstnameError,
-    ...firstnameProps
-  } = useStateWithError("");
 
-  const {
-    reset: resetLastname,
-    setError: setLastnameError,
-    ...lastnameProps
-  } = useStateWithError("");
+  React.useEffect(() => {
+    document.body.classList.add("register-background");
+    return () => {
+      document.body.classList.remove("register-background");
+    };
+  });
 
-  const {
-    reset: resetSchool,
-    setError: setSchoolError,
-    ...schoolProps
-  } = useStateWithError(0);
+  {
+    var {
+      reset: resetFirstname,
+      setError: setFirstnameError,
+      ...firstnameProps
+    } = useStateWithError("");
 
-  const {
-    reset: resetTel,
-    setError: setTelError,
-    ...telProps
-  } = useStateWithError("");
+    var {
+      reset: resetLastname,
+      setError: setLastnameError,
+      ...lastnameProps
+    } = useStateWithError("");
 
-  const {
-    reset: resetPassword,
-    setError: setPasswordError,
-    ...passwordProps
-  } = useStateWithError("");
-  const {
-    reset: resetEmail,
-    setError: setEmailError,
-    ...emailProps
-  } = useStateWithError("");
-  const {
-    reset: resetConsent,
-    setError: setConsentError,
-    ...consentProps
-  } = useStateWithError(false);
+    var {
+      reset: resetSchool,
+      setError: setSchoolError,
+      ...schoolProps
+    } = useStateWithError(0);
+
+    var {
+      reset: resetTel,
+      setError: setTelError,
+      ...telProps
+    } = useStateWithError("");
+
+    var {
+      reset: resetPassword,
+      setError: setPasswordError,
+      ...passwordProps
+    } = useStateWithError("");
+    var {
+      reset: resetEmail,
+      setError: setEmailError,
+      ...emailProps
+    } = useStateWithError("");
+    var {
+      reset: resetConsent,
+      setError: setConsentError,
+      ...consentProps
+    } = useStateWithError(false);
+  }
 
   const validateInput = () => {
     let valid = true;
@@ -179,7 +188,9 @@ const Register = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        width: "30%",
       }}
+      className="register-container"
     >
       {/* avatar box*/}
       <Box
@@ -208,7 +219,6 @@ const Register = () => {
       <Box
         sx={{
           flex: 4,
-          width: "30%",
           display: "flex",
           flexDirection: "row",
           flexWrap: "wrap",
@@ -297,12 +307,66 @@ const Register = () => {
           {...consentProps}
         />
       </Box>
-      <Box>
+      <Box sx={{}}>
         <Button variant="contained" onClick={onSubmit} endIcon={<SendIcon />}>
           提交
         </Button>
       </Box>
     </Container>
+  );
+};
+
+const avatarState = { value: "", error: false };
+const firstnameState = { value: "", error: false };
+const lastnameState = { value: "", error: false };
+const schoolState = { value: "", error: false };
+const emailState = { value: "", error: false };
+const phoneState = { value: "", error: false };
+const passwordState = { value: "", error: false };
+
+const Register = () => {
+  const fileRef = React.useRef();
+
+  React.useEffect(() => {
+    document.body.classList.add("reg-background");
+    return () => {
+      document.body.classList.remove("reg-background");
+    };
+  });
+
+  const [avatar, setAvatar] = React.useState({ value: "", error: false });
+  const [firstname, setFirstname] = React.useState({ value: "", error: false });
+  const [lasttname, setLastname] = React.useState({ value: "", error: false });
+  const [school, setSchool] = React.useState({ value: "", error: false });
+  const [email, setEmail] = React.useState({ value: "", error: false });
+  const [phone, setPhone] = React.useState({ value: "", error: false });
+  const [password, setPassword] = React.useState({ value: "", error: false });
+
+  return (
+    <form className="reg-form">
+      <div className="reg-name">
+        <input type="text" placeholder="姓*" required></input>
+        <input type="text" placeholder="名*" required></input>
+      </div>
+      <div className="reg-phone">
+        <input type="tel" placeholder="手机号码*" required></input>
+        <button>验证</button>
+      </div>
+      <input type="email" placeholder="邮箱"></input>
+      <input type="password" placeholder="密码*"></input>
+      <select>
+        <option value={0} selected>
+          --请选择你的学校--
+        </option>
+        <option value={1}>立石大学</option>
+        <option value={2}>浅草大学</option>
+      </select>
+      <div>
+        <input type="checkbox" id="check-term"></input>
+        <label for="check-term">同意条款</label>
+      </div>
+      <button type="submit">注册</button>
+    </form>
   );
 };
 
