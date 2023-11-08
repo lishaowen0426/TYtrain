@@ -8,6 +8,7 @@ const (
 	ENOTFOUND
 	EINTERNAL
 	EAUTH
+	EDUPLICATED
 )
 
 type ApiResponse struct {
@@ -34,4 +35,7 @@ func NewInternalError(err error) ApiResponse {
 
 func NewAuthError(err error) ApiResponse {
 	return ApiResponse{Code: EAUTH, Err: err.Error()}
+}
+func NewDuplicated(err error) ApiResponse {
+	return ApiResponse{Code: EDUPLICATED, Err: err.Error()}
 }

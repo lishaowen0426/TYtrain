@@ -45,5 +45,5 @@ func main() {
 		c.JSON(http.StatusOK, gin.H{"message": "you are validated!"})
 	})
 
-	r.Run(":8010")
+	r.Run("0.0.0.0:8010")
 }

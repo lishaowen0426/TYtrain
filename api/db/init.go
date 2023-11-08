@@ -19,4 +19,8 @@ func Connect() {
 	if err != nil {
 		panic(err)
 	}
+
+	{
+		DB.AutoMigrate(&TyUser{})
+	}
 }

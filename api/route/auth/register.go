@@ -3,6 +3,7 @@ package auth
 import (
 	"context"
 	"errors"
+	"fmt"
 	"net/http"
 	"time"
 
@@ -20,15 +21,15 @@ const tokenExpiration = 5 * time.Minute
 
 var jwtKey = []byte("abcdefg")
 
-type JwtClaim struct {
-	Username string `json:"username"`
+type jwtClaim struct {
+	from string
 	jwt.RegisteredClaims
 }
 
-func generateJwtToken(username string) (string, error) {
+func generateJwtToken(from string) (string, error) {
 	expirationTime := time.Now().Add(tokenExpiration)
-	claims := &JwtClaim{
-		Username: username,
+	claims := &jwtClaim{
+		from: from,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -38,46 +39,51 @@ func generateJwtToken(username string) (string, error) {
 	return token.SignedString(jwtKey)
 }
 
-type RegisterInput struct {
-	Username string `json:"username" binding:"required"`
-	Password string `json:"password" binding:"required"`
-}
-
 func Register(c *gin.Context) {
-	var input RegisterInput
+	var input db.TyUser
 	var err error
 
 	if err = c.ShouldBindJSON(&input); err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		c.JSON(http.StatusOK, apiresponse.NewInvParam(err))
 		return
 	}
 
-	var user db.TyUser
-	if err = db.DB.Where(&db.TyUser{Username: input.Username, Password: input.Password}).First(&user).Error; errors.Is(err, gorm.ErrRecordNotFound) {
+	if result := db.DB.First(&input); errors.Is(result.Error, gorm.ErrRecordNotFound) {
 		// register to db
-		user.Username = input.Username
-		user.Password = input.Password
-		user.Role = 1
 
-		if err = db.DB.Create(&user).Error; err != nil {
-			c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		if err = db.DB.Create(&input).Error; err != nil {
+			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 			return
-
 		}
 
-	} else if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+	} else if result.Error != nil {
+		c.JSON(http.StatusOK, apiresponse.NewInternalError(result.Error))
 		return
+	} else if result.RowsAffected == 1 {
+		fmt.Print(result.RowsAffected)
+		c.JSON(http.StatusOK, apiresponse.NewDuplicated(errors.New("Already registered")))
+		return
+	} else if result.RowsAffected > 1 {
+		panic(fmt.Sprintf("Duplicated users: %s\n", result.Error.Error()))
 	} else {
-		c.JSON(http.StatusBadRequest, gin.H{"error": "Already registered"})
-		return
+		panic(result.Error.Error())
 	}
 
-	c.JSON(http.StatusOK, gin.H{"message": "registered"})
+	if jwtToken, err := generateJwtToken(input.Phone); err != nil {
+		c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
+	} else {
+		ctx := context.Background()
+		if _, s_err := cache.RDB.SetNX(ctx, input.Phone, jwtToken, tokenExpiration).Result(); s_err != nil {
+			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
+			return
+		}
+		c.JSON(http.StatusOK, apiresponse.NewSuccess(gin.H{"token": jwtToken}))
+	}
+	return
 }
 
 type loginInput struct {
-	Username string `json:"username" binding:"required"`
+	Phone    string `json:"phone" binding:"required"`
 	Password string `json:"password" binding:"required"`
 }
 
@@ -89,7 +95,7 @@ func Login(c *gin.Context) {
 	}
 
 	var user db.TyUser
-	if err := db.DB.Where(&db.TyUser{Username: input.Username, Password: input.Password}).First(&user).Error; err != nil {
+	if err := db.DB.Where(&db.TyUser{Phone: input.Phone, Password: input.Password}).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusOK, apiresponse.NewNotFound(err))
 			return
@@ -104,15 +110,15 @@ func Login(c *gin.Context) {
 	var jwtToken string
 
 	// check whether a token exists
-	if token, err := cache.RDB.Get(ctx, user.Username).Result(); err == redis.Nil {
+	if token, err := cache.RDB.Get(ctx, user.Phone).Result(); err == redis.Nil {
 		// token doesn't exist
-		if t, t_err := generateJwtToken(user.Username); t_err != nil {
+		if t, t_err := generateJwtToken(user.Phone); t_err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 			return
 		} else {
 			// insert new token to cache
 			jwtToken = t
-			if _, s_err := cache.RDB.SetNX(ctx, user.Username, jwtToken, tokenExpiration).Result(); s_err != nil {
+			if _, s_err := cache.RDB.SetNX(ctx, user.Phone, jwtToken, tokenExpiration).Result(); s_err != nil {
 				c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 				return
 			}
@@ -130,14 +136,26 @@ func Login(c *gin.Context) {
 
 func ValidationMiddleWare(c *gin.Context) {
 	token := c.Request.Header.Get("Authorization")
+	var claim jwtClaim
 	if token != "" {
-		if _, err := jwt.Parse(token, func(token *jwt.Token) (any, error) {
+		if _, err := jwt.ParseWithClaims(token, &claim, func(token *jwt.Token) (any, error) {
 			return jwtKey, nil
 		}); err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewAuthError(err))
 			c.Abort()
 		} else {
-			c.Next()
+			//check if exist in Redis
+			ctx := context.Background()
+			if s_t, s_err := cache.RDB.Get(ctx, claim.from).Result(); s_t != token || s_err == redis.Nil {
+				c.JSON(http.StatusOK, apiresponse.NewAuthError(errors.New("Unauthorized")))
+				c.Abort()
+			} else if s_err != nil {
+				c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
+				c.Abort()
+
+			} else {
+				c.Next()
+			}
 		}
 	} else {
 		c.JSON(http.StatusOK, apiresponse.NewAuthError(errors.New("Unauthorized")))

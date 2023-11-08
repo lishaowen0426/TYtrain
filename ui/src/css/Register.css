@@ -1,10 +1,14 @@
-.register-container {
-  margin-top: 5%;
-  border-radius: 25px;
-  border: 2px solid #a9a9a9;
-  padding: 20px;
-  width: 200px;
-  height: 150px;
+.reg-container {
+  --container-width: 20%;
+  --left-margin: calc((100% - var(--container-width)) / 2);
+  margin-top: 10%;
+  margin-left: var(--left-margin);
+  margin-right: var(--left-margin);
+  margin-bottom: auto;
+  width: var(--container-width);
+  display: flex;
+  flex-flow: row wrap;
+  align-items: flex-start;
 }
 
 .reg-background {
@@ -14,14 +18,7 @@
 }
 
 .reg-form {
-  --form-width: 30%;
-  --left-margin: calc((100% - var(--form-width)) / 2);
-  border-radius: 25px;
-  border: 2px solid #a9a9a9;
-  padding: 20px;
-  margin: 10% var(--left-margin) auto
-    calc(100% - var(--form-width) - var(--left-margin));
-  width: var(--form-width);
+  width: 100%;
   display: flex;
   flex-flow: row wrap;
   justify-content: flex-start;
@@ -36,11 +33,28 @@
 
 .reg-name > input {
   flex: 0 0 auto;
-  width: 45%;
+  width: 48%;
 }
 
 .reg-form > input {
   width: 100%;
+}
+.reg-form input[type="text"],
+.reg-form input[type="tel"],
+.reg-form input[type="password"],
+.reg-form input[type="email"] {
+  padding: 7px;
+  border-radius: 6px;
+  font-size: 16px;
+  background: #fbfbfb;
+  border: 2px solid transparent;
+  height: 36px;
+  box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
+    0 1px 1.5px 0 rgb(0 0 0 / 5%);
+  :focus {
+    border: 2px solid #000;
+    border-radius: 4px;
+  }
 }
 
 .reg-phone {
@@ -51,17 +65,213 @@
 .reg-phone > input {
   flex: 0 0 auto;
   width: 70%;
+  margin-right: 5%;
 }
 .reg-phone > button {
   flex: 1 0 auto;
 }
 
-.reg-form > select {
-  flex: 0 0 auto;
-  width: 50%;
+/* CSS */
+.reg-phone > button {
+  appearance: none;
+  background-color: #fafbfc;
+  border: 1px solid rgba(27, 31, 35, 0.15);
+  border-radius: 6px;
+  box-shadow: rgba(27, 31, 35, 0.04) 0 1px 0,
+    rgba(255, 255, 255, 0.25) 0 1px 0 inset;
+  box-sizing: border-box;
+  color: #24292e;
+  cursor: pointer;
+  display: inline-block;
+  font-family: -apple-system, system-ui, "Segoe UI", Helvetica, Arial,
+    sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 20px;
+  list-style: none;
+  padding: 6px 16px;
+  position: relative;
+  transition: background-color 0.2s cubic-bezier(0.3, 0, 0.5, 1);
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: middle;
+  white-space: nowrap;
+  word-wrap: break-word;
 }
 
-.reg-form > button[type="submit"] {
+.reg-phone > button:hover {
+  background-color: #f3f4f6;
+  text-decoration: none;
+  transition-duration: 0.1s;
+}
+
+.reg-phone > button:disabled {
+  background-color: #fafbfc;
+  border-color: rgba(27, 31, 35, 0.15);
+  color: #959da5;
+  cursor: default;
+}
+
+.reg-phone > button:active {
+  background-color: #edeff2;
+  box-shadow: rgba(225, 228, 232, 0.2) 0 1px 0 inset;
+  transition: none 0s;
+}
+
+.reg-phone > button:focus {
+  outline: 1px transparent;
+}
+
+.reg-phone > button:before {
+  display: none;
+}
+
+.reg-phone > button:-webkit-details-marker {
+  display: none;
+}
+
+.reg-form > select {
+  flex: 0 0 auto;
+  width: 60%;
+  border-radius: 6px;
+  font-size: 16px;
+  background: #fbfbfb;
+  border: 2px solid transparent;
+  height: 36px;
+  box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
+    0 1px 1.5px 0 rgb(0 0 0 / 5%);
+}
+
+/* CSS */
+.signbutton {
+  flex-basis: 50%;
+  align-items: center;
+  background-color: #ffffff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 0.25rem;
+  box-shadow: rgba(0, 0, 0, 0.02) 0 1px 3px 0;
+  box-sizing: border-box;
+  color: rgba(0, 0, 0, 0.85);
+  cursor: pointer;
+  display: inline-flex;
+  font-family: system-ui, -apple-system, system-ui, "Helvetica Neue", Helvetica,
+    Arial, sans-serif;
+  font-size: 16px;
+  font-weight: 600;
+  justify-content: center;
+  line-height: 1.25;
+  margin: 0;
+  min-height: 3rem;
+  padding: calc(0.875rem - 1px) calc(1.5rem - 1px);
+  position: relative;
+  text-decoration: none;
+  transition: all 250ms;
+  user-select: none;
+  -webkit-user-select: none;
+  touch-action: manipulation;
+  vertical-align: baseline;
+  margin-bottom: 5%;
+}
+
+.signbutton:hover,
+.sinbutton:focus {
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.1) 0 4px 12px;
+  color: rgba(0, 0, 0, 0.65);
+}
+
+.signbutton:hover {
+  transform: translateY(-1px);
+}
+
+.signbutton:active {
+  background-color: #f0f0f1;
+  border-color: rgba(0, 0, 0, 0.15);
+  box-shadow: rgba(0, 0, 0, 0.06) 0 2px 4px;
+  color: rgba(0, 0, 0, 0.65);
+  transform: translateY(0);
+}
+
+.sign-submit-button {
+  cursor: pointer;
+  border: 0;
+  border-radius: 4px;
+  font-weight: 600;
+  padding: 10px 0;
+  box-shadow: 0 0 20px rgba(104, 85, 224, 0.2);
+  transition: 0.4s;
   flex: 0 0 auto;
   width: 100%;
+}
+
+.sign-submit-button.signup {
+  color: white;
+  background-color: #5f9fd2;
+}
+
+.sign-submit-button.signin {
+  color: #5f9fd2;
+  background-color: rgba(255, 255, 255, 1);
+  border: 1px solid #a8d1e8;
+}
+
+.sign-submit-button.signup:hover {
+  color: white;
+  box-shadow: 0 0 20px #233148;
+  background-color: #334f75;
+}
+
+.sign-submit-button.signin:hover {
+  box-shadow: 0 0 20px #233148;
+  background-color: #f2f8fc;
+}
+
+.consent-checkbox {
+  margin-top: 3%;
+}
+
+.consent-checkbox .checkbox {
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  user-select: none;
+}
+.consent-checkbox .checkbox > input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  z-index: -1;
+}
+
+.consent-checkbox .checkbox__icon {
+  display: inline-block;
+  color: #999;
+  vertical-align: middle;
+  margin-right: 5px;
+}
+.consent-checkbox input[type="checkbox"]:checked ~ .checkbox__icon {
+  color: #2a7dea;
+}
+
+.consent-checkbox .checkbox__icon:before {
+  font-family: "icons-27";
+  speak: none;
+  font-style: normal;
+  font-weight: normal;
+  font-variant: normal;
+  text-transform: none;
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+.consent-checkbox .icon--check:before,
+.consent-checkbox input[type="checkbox"]:checked ~ .checkbox__icon:before {
+  content: "\e601";
+}
+
+.consent-checkbox .icon--check-empty:before,
+.consent-checkbox .checkbox__icon:before {
+  content: "\e600";
 }

@@ -1,10 +1,14 @@
 package db
 
 type TyUser struct {
-	ID       uint
-	Username string
-	Password string
-	Role     uint
+	ID        uint
+	Password  string `json:"password" binding:"required"`
+	Role      uint
+	Firstname string `json:"firstname" binding:"required"`
+	Lastname  string `json:"lastname" binding:"required"`
+	Email     string `json:"email" binding:"required"`
+	School    int    `json:"school,string" binding:"required"`
+	Phone     string `json:"phone" binding:"required" gorm:"uniqueIndex`
 }
 
 func (TyUser) TableName() string {
