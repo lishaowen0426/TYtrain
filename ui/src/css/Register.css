@@ -39,15 +39,27 @@
 .reg-form > input {
   width: 100%;
 }
-.reg-form input[type="text"],
-.reg-form input[type="tel"],
-.reg-form input[type="password"],
-.reg-form input[type="email"] {
+.reg-form input[type="text"] {
   padding: 7px;
   border-radius: 6px;
   font-size: 16px;
   background: #fbfbfb;
   border: 2px solid transparent;
+  height: 36px;
+  box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
+    0 1px 1.5px 0 rgb(0 0 0 / 5%);
+  :focus {
+    border: 2px solid #000;
+    border-radius: 4px;
+  }
+}
+
+.reg-form input[type="text"].error {
+  padding: 7px;
+  border-radius: 6px;
+  font-size: 16px;
+  background: #fbfbfb;
+  border: 2px solid var(--error-color);
   height: 36px;
   box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
     0 1px 1.5px 0 rgb(0 0 0 / 5%);
@@ -142,6 +154,17 @@
   box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
     0 1px 1.5px 0 rgb(0 0 0 / 5%);
 }
+.reg-form > select.error {
+  flex: 0 0 auto;
+  width: 60%;
+  border-radius: 6px;
+  font-size: 16px;
+  background: #fbfbfb;
+  border: 2px solid var(--error-color);
+  height: 36px;
+  box-shadow: 0 0 0 1px #dddddd, 0 2px 4px 0 rgb(0 0 0 / 7%),
+    0 1px 1.5px 0 rgb(0 0 0 / 5%);
+}
 
 /* CSS */
 .signbutton {
@@ -207,24 +230,24 @@
 
 .sign-submit-button.signup {
   color: white;
-  background-color: #5f9fd2;
+  background-color: var(--blue-500);
 }
 
 .sign-submit-button.signin {
-  color: #5f9fd2;
-  background-color: rgba(255, 255, 255, 1);
+  color: white;
+  background-color: var(--blue-500);
   border: 1px solid #a8d1e8;
 }
 
 .sign-submit-button.signup:hover {
   color: white;
   box-shadow: 0 0 20px #233148;
-  background-color: #334f75;
+  background-color: var(--blue-700);
 }
 
 .sign-submit-button.signin:hover {
   box-shadow: 0 0 20px #233148;
-  background-color: #f2f8fc;
+  background-color: var(--blue-700);
 }
 
 .consent-checkbox {
@@ -244,34 +267,10 @@
   z-index: -1;
 }
 
-.consent-checkbox .checkbox__icon {
-  display: inline-block;
-  color: #999;
-  vertical-align: middle;
-  margin-right: 5px;
-}
-.consent-checkbox input[type="checkbox"]:checked ~ .checkbox__icon {
-  color: #2a7dea;
+.consent-checkbox > label {
+  margin-left: 2px;
 }
 
-.consent-checkbox .checkbox__icon:before {
-  font-family: "icons-27";
-  speak: none;
-  font-style: normal;
-  font-weight: normal;
-  font-variant: normal;
-  text-transform: none;
-  /* Better Font Rendering =========== */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.consent-checkbox .icon--check:before,
-.consent-checkbox input[type="checkbox"]:checked ~ .checkbox__icon:before {
-  content: "\e601";
-}
-
-.consent-checkbox .icon--check-empty:before,
-.consent-checkbox .checkbox__icon:before {
-  content: "\e600";
+.consent-checkbox > label.error {
+  color: var(--error-color);
 }

@@ -48,9 +48,10 @@ func Register(c *gin.Context) {
 		return
 	}
 
-	if result := db.DB.First(&input); errors.Is(result.Error, gorm.ErrRecordNotFound) {
-		// register to db
+	var user db.TyUser
 
+	if result := db.DB.Where(&input).First(&user); errors.Is(result.Error, gorm.ErrRecordNotFound) {
+		// register to db
 		if err = db.DB.Create(&input).Error; err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 			return
@@ -60,7 +61,6 @@ func Register(c *gin.Context) {
 		c.JSON(http.StatusOK, apiresponse.NewInternalError(result.Error))
 		return
 	} else if result.RowsAffected == 1 {
-		fmt.Print(result.RowsAffected)
 		c.JSON(http.StatusOK, apiresponse.NewDuplicated(errors.New("Already registered")))
 		return
 	} else if result.RowsAffected > 1 {
@@ -129,6 +129,8 @@ func Login(c *gin.Context) {
 		return
 	} else {
 		// token exists
+		// refresh expiration
+		cache.RDB.ExpireGT(ctx, user.Phone, tokenExpiration)
 		jwtToken = token
 	}
 	c.JSON(http.StatusOK, apiresponse.NewSuccess(gin.H{"token": jwtToken}))

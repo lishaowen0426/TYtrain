@@ -1,30 +1,32 @@
 import * as React from "react";
-import { ThemeProvider, useTheme } from "@mui/material/styles";
-import Container from "@mui/material/Container";
-import Box from "@mui/material/Box";
-import Typography from "@mui/material/Typography";
-import Avatar from "@mui/material/Avatar";
-import IconButton from "@mui/material/IconButton";
-import { styled } from "@mui/material/styles";
-import ButtonBase from "@mui/material/ButtonBase";
-import Button from "@mui/material/Button";
-import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import Grid from "@mui/material/Grid";
-import TextField from "@mui/material/TextField";
-import MenuItem from "@mui/material/MenuItem";
-import InputLabel from "@mui/material/InputLabel";
-import Select from "@mui/material/Select";
-import FormControl from "@mui/material/FormControl";
-import { Form } from "react-router-dom";
-import FormControlLabel from "@mui/material/FormControlLabel";
-import Checkbox from "@mui/material/Checkbox";
-import SendIcon from "@mui/icons-material/Send";
-import { Menu } from "@mui/material";
-import AccountCircleIcon from "@mui/icons-material/AccountCircle";
-import Stack from "@mui/material/Stack";
-import { useCookies } from "react-cookie";
+import { useCookies, Cookies } from "react-cookie";
 import { useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import Dashboard from "./dashboard";
+import Knowledge from "./knowledge";
+
+const setErrorFromEvent = (state, event) => {
+  let error = true;
+  switch (typeof state.value) {
+    case "string":
+      if (event.target.value.length > 0) {
+        error = false;
+      }
+      break;
+    case "number":
+      if (event.target.value > 0) {
+        error = false;
+      }
+      break;
+    case "boolean":
+      if (event.target.value) {
+        error = false;
+      }
+      break;
+  }
+
+  return state.error ? error : false;
+};
 
 const SignUp = () => {
   const [cookie, setCookie] = useCookies(["token"]);
@@ -39,34 +41,94 @@ const SignUp = () => {
   const [consent, setConsent] = React.useState({ value: false, error: false });
 
   const handleFirstnameChange = event => {
-    setFirstname({ ...firstname, value: event.target.value });
+    setFirstname({
+      ...firstname,
+      value: event.target.value,
+      error: setErrorFromEvent(firstname, event),
+    });
   };
   const handleLastnameChange = event => {
-    setLastname({ ...lastname, value: event.target.value });
+    setLastname({
+      ...lastname,
+      value: event.target.value,
+      error: setErrorFromEvent(lastname, event),
+    });
   };
   const handleSchoolChange = event => {
-    setSchool({ ...school, value: event.target.value });
-    console.log(school);
+    setSchool({
+      ...school,
+      value: event.target.value,
+      error: setErrorFromEvent(school, event),
+    });
   };
   const handleEmailChange = event => {
-    setEmail({ ...email, value: event.target.value });
+    setEmail({
+      ...email,
+      value: event.target.value,
+      error: setErrorFromEvent(email, event),
+    });
   };
   const handlePhoneChange = event => {
-    setPhone({ ...phone, value: event.target.value });
+    setPhone({
+      ...phone,
+      value: event.target.value,
+      error: setErrorFromEvent(phone, event),
+    });
   };
   const handlePasswordChange = event => {
-    setPassword({ ...password, value: event.target.value });
+    setPassword({
+      ...password,
+      value: event.target.value,
+      error: setErrorFromEvent(password, event),
+    });
   };
   const handleConsentChange = event => {
-    setConsent({ ...consent, value: !consent.value });
+    setConsent({
+      ...consent,
+      value: !consent.value,
+      error: setErrorFromEvent(consent, event),
+    });
   };
 
-  const validateInput = () => true;
+  const validateInput = () => {
+    let isValid = true;
+    if (firstname.value.length == 0) {
+      setFirstname({ ...firstname, error: true });
+      isValid = false;
+    }
+    if (phone.value.length == 0) {
+      setPhone({ ...phone, error: true });
+      isValid = false;
+    }
+    if (lastname.value.length == 0) {
+      setLastname({ ...lastname, error: true });
+      isValid = false;
+    }
+    if (school.value == 0) {
+      setSchool({ ...school, error: true });
+      isValid = false;
+    }
+    if (email.value.length == 0) {
+      setEmail({ ...email, error: true });
+      isValid = false;
+    }
+    if (password.value.length == 0) {
+      setPassword({ ...password, error: true });
+      isValid = false;
+    }
+
+    if (!consent.value) {
+      setConsent({ ...consent, error: true });
+      isValid = false;
+    }
+
+    return isValid;
+  };
 
   const handleSubmit = event => {
     event.preventDefault();
 
-    if (validateInput) {
+    if (validateInput()) {
       const info = {
         firstname: firstname.value,
         lastname: lastname.value,
@@ -75,7 +137,6 @@ const SignUp = () => {
         phone: phone.value,
         password: password.value,
       };
-      console.log(info);
       fetch("http://127.0.0.1:8010/api/register", {
         method: "POST",
         headers: {
@@ -87,8 +148,9 @@ const SignUp = () => {
         .then(data => {
           if (data.code == 0) {
             //success
-            setCookie("token", data.token, { path: "/" });
-            navigate("/dashboard");
+            console.log(data);
+            setCookie("token", data.fields.token, { path: "/" });
+            navigate("/knowledge");
           } else {
             //registration failed
             alert(data.error);
@@ -107,6 +169,7 @@ const SignUp = () => {
           type="text"
           placeholder="姓*"
           value={firstname.value}
+          className={firstname.error ? "error" : undefined}
           onChange={handleFirstnameChange}
         />
 
@@ -114,31 +177,39 @@ const SignUp = () => {
           type="text"
           placeholder="名*"
           value={lastname.value}
+          className={lastname.error ? "error" : undefined}
           onChange={handleLastnameChange}
         ></input>
       </div>
       <div className="reg-phone">
         <input
-          type="tel"
+          type="text"
           placeholder="手机号码*"
           value={phone.value}
+          className={phone.error ? "error" : undefined}
           onChange={handlePhoneChange}
         ></input>
         <button>验证</button>
       </div>
       <input
         type="text"
-        placeholder="邮箱"
+        placeholder="邮箱*"
         value={email.value}
+        className={email.error ? "error" : undefined}
         onChange={handleEmailChange}
       ></input>
       <input
-        type="password"
+        type="text"
         placeholder="密码*"
         value={password.value}
+        className={password.error ? "error" : undefined}
         onChange={handlePasswordChange}
       ></input>
-      <select value={school.value} onChange={handleSchoolChange}>
+      <select
+        value={school.value}
+        className={school.error ? "error" : undefined}
+        onChange={handleSchoolChange}
+      >
         <option value={0} selected>
           --请选择你的学校--
         </option>
@@ -150,9 +221,10 @@ const SignUp = () => {
           type="checkbox"
           id="check-term"
           value={consent.value}
+          className={"checkbox"}
           onChange={handleConsentChange}
         ></input>
-        <label for="check-term">同意条款</label>
+        <label className={consent.error ? "error" : undefined}>同意条款</label>
       </div>
       <button className="sign-submit-button signup">注册</button>
     </form>
@@ -160,11 +232,89 @@ const SignUp = () => {
 };
 
 const SignIn = () => {
-  return (
-    <form className="reg-form">
-      <input type="tel" placeholder="手机号码*" required></input>
+  const [phone, setPhone] = React.useState({ value: "", error: false });
+  const [password, setPassword] = React.useState({ value: "", error: false });
+  const [cookie, setCookie] = useCookies(["token"]);
+  const navigate = useNavigate();
 
-      <input type="password" placeholder="密码*"></input>
+  const handlePhoneChange = event => {
+    setPhone({
+      ...phone,
+      value: event.target.value,
+      error: setErrorFromEvent(phone, event),
+    });
+  };
+  const handlePasswordChange = event => {
+    setPassword({
+      ...password,
+      value: event.target.value,
+      error: setErrorFromEvent(password, event),
+    });
+  };
+
+  const validateInput = () => {
+    let isValid = true;
+
+    if (phone.value.length == 0) {
+      setPhone({ ...phone, error: true });
+      isValid = false;
+    }
+
+    if (password.value.length == 0) {
+      setPassword({ ...password, error: true });
+      isValid = false;
+    }
+
+    return isValid;
+  };
+
+  const handleSubmit = event => {
+    event.preventDefault();
+
+    if (validateInput()) {
+      const info = {
+        phone: phone.value,
+        password: password.value,
+      };
+      fetch("http://127.0.0.1:8010/api/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(info),
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.code == 0) {
+            //success
+            setCookie("token", data.fields.token, { path: "/" });
+            navigate("/knowledge");
+          } else {
+            //registration failed
+            alert(data.error);
+          }
+        })
+        .catch(error => {
+          console.error("Error:", error);
+        });
+    }
+  };
+  return (
+    <form className="reg-form" onSubmit={handleSubmit}>
+      <input
+        type="text"
+        placeholder="手机号码*"
+        value={phone.value}
+        onChange={handlePhoneChange}
+        className={phone.error ? "error" : undefined}
+      ></input>
+      <input
+        type="text"
+        placeholder="密码*"
+        value={password.value}
+        onChange={handlePasswordChange}
+        className={password.error ? "error" : undefined}
+      ></input>
 
       <button type="submit" className="sign-submit-button signin">
         登陆
@@ -175,15 +325,6 @@ const SignIn = () => {
 
 const RegisterAndLogin = () => {
   const fileRef = React.useRef();
-
-  React.useEffect(() => {
-    //document.body.classList.add("reg-background");
-    return () => {
-      //document.body.classList.remove("reg-background");
-    };
-  });
-
-  //const [avatar, setAvatar] = React.useState({ value: "", error: false });
 
   const [signUp, setSignUp] = React.useState(true);
 

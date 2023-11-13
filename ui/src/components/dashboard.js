@@ -3,8 +3,8 @@ import { useCookies } from "react-cookie";
 
 const Dashboard = props => {
   const [cookie, setCookie] = useCookies(["token"]);
-
-  alert("welcome " + cookie);
+  console.log(cookie);
+  return <div>Welcome</div>;
 };
 
 export default Dashboard;
