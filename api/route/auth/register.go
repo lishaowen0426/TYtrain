@@ -17,19 +17,19 @@ import (
 	"gorm.io/gorm"
 )
 
-const tokenExpiration = 5 * time.Minute
+const tokenExpiration = 20 * time.Minute
 
 var jwtKey = []byte("abcdefg")
 
 type jwtClaim struct {
-	from string
+	From string `json:"from"`
 	jwt.RegisteredClaims
 }
 
 func generateJwtToken(from string) (string, error) {
 	expirationTime := time.Now().Add(tokenExpiration)
-	claims := &jwtClaim{
-		from: from,
+	claims := jwtClaim{
+		From: from,
 		RegisteredClaims: jwt.RegisteredClaims{
 			ExpiresAt: jwt.NewNumericDate(expirationTime),
 		},
@@ -69,11 +69,11 @@ func Register(c *gin.Context) {
 		panic(result.Error.Error())
 	}
 
-	if jwtToken, err := generateJwtToken(input.Phone); err != nil {
+	if jwtToken, err := generateJwtToken(input.Username); err != nil {
 		c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 	} else {
 		ctx := context.Background()
-		if _, s_err := cache.RDB.SetNX(ctx, input.Phone, jwtToken, tokenExpiration).Result(); s_err != nil {
+		if _, s_err := cache.RDB.SetNX(ctx, input.Username, jwtToken, tokenExpiration).Result(); s_err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 			return
 		}
@@ -83,7 +83,8 @@ func Register(c *gin.Context) {
 }
 
 type loginInput struct {
-	Phone    string `json:"phone" binding:"required"`
+	Phone    string `json:"phone" binding:-`
+	Username string `json:"username" binding:"required_without=Phone"`
 	Password string `json:"password" binding:"required"`
 }
 
@@ -95,7 +96,7 @@ func Login(c *gin.Context) {
 	}
 
 	var user db.TyUser
-	if err := db.DB.Where(&db.TyUser{Phone: input.Phone, Password: input.Password}).First(&user).Error; err != nil {
+	if err := db.DB.Where(&db.TyUser{Phone: input.Phone, Username: input.Username, Password: input.Password}).First(&user).Error; err != nil {
 		if errors.Is(err, gorm.ErrRecordNotFound) {
 			c.JSON(http.StatusOK, apiresponse.NewNotFound(err))
 			return
@@ -110,15 +111,15 @@ func Login(c *gin.Context) {
 	var jwtToken string
 
 	// check whether a token exists
-	if token, err := cache.RDB.Get(ctx, user.Phone).Result(); err == redis.Nil {
+	if token, err := cache.RDB.Get(ctx, user.Username).Result(); err == redis.Nil {
 		// token doesn't exist
-		if t, t_err := generateJwtToken(user.Phone); t_err != nil {
+		if t, t_err := generateJwtToken(user.Username); t_err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 			return
 		} else {
 			// insert new token to cache
 			jwtToken = t
-			if _, s_err := cache.RDB.SetNX(ctx, user.Phone, jwtToken, tokenExpiration).Result(); s_err != nil {
+			if _, s_err := cache.RDB.SetNX(ctx, user.Username, jwtToken, tokenExpiration).Result(); s_err != nil {
 				c.JSON(http.StatusOK, apiresponse.NewInternalError(err))
 				return
 			}
@@ -130,25 +131,33 @@ func Login(c *gin.Context) {
 	} else {
 		// token exists
 		// refresh expiration
-		cache.RDB.ExpireGT(ctx, user.Phone, tokenExpiration)
+		cache.RDB.ExpireGT(ctx, user.Username, tokenExpiration)
 		jwtToken = token
 	}
 	c.JSON(http.StatusOK, apiresponse.NewSuccess(gin.H{"token": jwtToken}))
 }
 
 func ValidationMiddleWare(c *gin.Context) {
-	token := c.Request.Header.Get("Authorization")
-	var claim jwtClaim
-	if token != "" {
-		if _, err := jwt.ParseWithClaims(token, &claim, func(token *jwt.Token) (any, error) {
+	tokenString := c.Request.Header.Get("Authorization")
+	fmt.Printf("Token: %s\n", tokenString)
+	if tokenString != "" {
+		if token, err := jwt.ParseWithClaims(tokenString, &jwtClaim{}, func(token *jwt.Token) (any, error) {
 			return jwtKey, nil
 		}); err != nil {
 			c.JSON(http.StatusOK, apiresponse.NewAuthError(err))
 			c.Abort()
 		} else {
 			//check if exist in Redis
+			claim := token.Claims.(*jwtClaim)
+			if c, ok := token.Claims.(*jwtClaim); ok && token.Valid {
+				fmt.Printf("from: %s\n", c.From)
+			} else {
+				fmt.Printf("sss")
+				fmt.Println(ok)
+			}
+			fmt.Printf("from: %s\n", claim.From)
 			ctx := context.Background()
-			if s_t, s_err := cache.RDB.Get(ctx, claim.from).Result(); s_t != token || s_err == redis.Nil {
+			if s_t, s_err := cache.RDB.Get(ctx, claim.From).Result(); s_t != tokenString || s_err == redis.Nil {
 				c.JSON(http.StatusOK, apiresponse.NewAuthError(errors.New("Unauthorized")))
 				c.Abort()
 			} else if s_err != nil {
@@ -156,6 +165,7 @@ func ValidationMiddleWare(c *gin.Context) {
 				c.Abort()
 
 			} else {
+				c.Set("username", claim.From)
 				c.Next()
 			}
 		}

@@ -11,6 +11,7 @@ type TyUser struct {
 	Role      uint
 	Firstname string `json:"firstname" binding:"required"`
 	Lastname  string `json:"lastname" binding:"required"`
+	Username  string `json:"username" binding:"required"`
 	Email     string `json:"email" binding:"required"`
 	School    int    `json:"school,string" binding:"required"`
 	Phone     string `json:"phone" binding:"required" gorm:"uniqueIndex"`
@@ -37,10 +38,10 @@ type TyKnowledge struct {
 	gorm.Model
 	Guid               uuid.UUID `gorm:"type:uuid;default:uuid_generate_v4()"`
 	Title              string    `json:"title"`
-	Content            string    `json:"content"`
+	Content            string    `json:"content" gorm:"type:text"`
 	Tags               string    `json:"tags"`
 	Category           string    `json:"category"`
 	CreateUser         string    `json:"createUser"`
 	TagsType           string    `json:"tagsType"`
-	TyKnowledgeContent string    `json:"knowledgeContent"`
+	TyKnowledgeContent string    `json:"knowledgeContent" gorm:"type:text"`
 }

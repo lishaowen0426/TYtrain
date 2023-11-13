@@ -1,7 +1,6 @@
 package main
 
 import (
-	"net/http"
 	"os"
 	"path"
 	"time"
@@ -9,6 +8,7 @@ import (
 	"api/cache"
 	"api/db"
 	"api/route/auth"
+	"api/route/knowledge"
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
@@ -41,9 +41,8 @@ func main() {
 
 	validated := api.Group("/validated")
 	validated.Use(auth.ValidationMiddleWare)
-	validated.GET("/test", func(c *gin.Context) {
-		c.JSON(http.StatusOK, gin.H{"message": "you are validated!"})
-	})
+
+	validated.GET("knowledge/getPaginatedKnowledge", knowledge.PaginatedKnowledge)
 
 	r.Run("0.0.0.0:8010")
 }

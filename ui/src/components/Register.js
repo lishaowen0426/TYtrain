@@ -36,6 +36,7 @@ const SignUp = () => {
   const [lastname, setLastname] = React.useState({ value: "", error: false });
   const [school, setSchool] = React.useState({ value: 0, error: false });
   const [email, setEmail] = React.useState({ value: "", error: false });
+  const [username, setUsername] = React.useState({ value: "", error: false });
   const [phone, setPhone] = React.useState({ value: "", error: false });
   const [password, setPassword] = React.useState({ value: "", error: false });
   const [consent, setConsent] = React.useState({ value: false, error: false });
@@ -52,6 +53,13 @@ const SignUp = () => {
       ...lastname,
       value: event.target.value,
       error: setErrorFromEvent(lastname, event),
+    });
+  };
+  const handleUsernameChange = event => {
+    setUsername({
+      ...username,
+      value: event.target.value,
+      error: setErrorFromEvent(username, event),
     });
   };
   const handleSchoolChange = event => {
@@ -104,6 +112,10 @@ const SignUp = () => {
       setLastname({ ...lastname, error: true });
       isValid = false;
     }
+    if (username.value.length == 0) {
+      setUsername({ ...username, error: true });
+      isValid = false;
+    }
     if (school.value == 0) {
       setSchool({ ...school, error: true });
       isValid = false;
@@ -132,6 +144,7 @@ const SignUp = () => {
       const info = {
         firstname: firstname.value,
         lastname: lastname.value,
+        username: username.value,
         school: school.value,
         email: email.value,
         phone: phone.value,
@@ -191,6 +204,13 @@ const SignUp = () => {
         ></input>
         <button>验证</button>
       </div>
+      <input
+        type="text"
+        placeholder="用户名*"
+        value={username.value}
+        className={username.error ? "error" : undefined}
+        onChange={handleUsernameChange}
+      ></input>
       <input
         type="text"
         placeholder="邮箱*"
