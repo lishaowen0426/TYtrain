@@ -1,5 +1,6 @@
 module.exports = {
   content: ["./src/**/*.{html,js}", "./public/index.html"],
+  important:true,
   theme: {
     colors: {
       transparent: "transparent",

@@ -1,5 +1,5 @@
 @layer components {
   .ty-checkbox {
-    width: 10px;
+    @apply text-sky-50 
   }
 }
