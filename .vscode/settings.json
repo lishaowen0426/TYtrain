@@ -11,5 +11,8 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true
   },
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
   "auto-rename-tag.activationOnLanguage": ["html", "xml", "php", "javascript"]
 }

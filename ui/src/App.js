@@ -21,17 +21,15 @@ import "./App.css";
 import { CookiesProvider, useCookies } from "react-cookie";
 import Dashboard from "./components/dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
+import { TySubmitButton } from "./components/TyButton";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
-const Tail = () => (
-  <h1 className="text-style">Hello world! I am using React</h1>
-);
+const Tail = () => <h1 className="text-style font-ty">欢迎光临</h1>;
 
 function App() {
   return (
     <React.Fragment>
-      <CssBaseline />
       <CookiesProvider>
         <RouterProvider router={router} />
       </CookiesProvider>
@@ -42,7 +40,7 @@ function App() {
 function Root() {
   return (
     <Routes>
-      <Route path="/tail" element={<Tail />} />
+      <Route path="/button" element={<TySubmitButton>提交</TySubmitButton>} />
       <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />

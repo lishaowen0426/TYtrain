@@ -1,5 +1,11 @@
 @layer components {
   .ty-button {
-    width: 10px;
+    @apply appearance-none normal-case cursor-pointer box-border relative  font-ty text-center border-solid border rounded-md w-fit select-none text-3xl overflow-visible pt-2 pb-3 bg-sky-800;
   }
 }
+
+
+
+
+
+
