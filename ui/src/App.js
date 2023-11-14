@@ -21,6 +21,10 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import Dashboard from "./components/dashboard";
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
+const Tail = () => (
+  <h1 className="text-style">Hello world! I am using React</h1>
+);
+
 function App() {
   return (
     <React.Fragment>
@@ -35,6 +39,7 @@ function App() {
 function Root() {
   return (
     <Routes>
+      <Route path="/tail" element={<Tail />} />
       <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />

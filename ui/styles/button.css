@@ -1,0 +1,5 @@
+@layer components {
+  .ty-button {
+    width: 10px;
+  }
+}
