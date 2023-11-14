@@ -10,10 +10,12 @@ import Register from "./components/Register";
 import Knowledge from "./components/knowledge";
 import KnowledgeInput from "./components/KnowledgeInput";
 import KnowledgeImport from "./components/KnowledgeImport";
+import KnowledgeRoute from "./components/KnowledgeRoute";
 import Interview from "./components/interview";
 import KnowledgeManage from "./components/KnowledgeManage";
 import { CssBaseline, ThemeProvider } from "@mui/material";
 import Theme from "./theme/theme";
+import 'bootstrap/dist/css/bootstrap.min.css';
 
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
@@ -41,6 +43,7 @@ function Root() {
       <Route path="/knowledgeInput/:guid" element={<KnowledgeInput />} />
       <Route path="/KnowledgeImport" element={<KnowledgeImport />} />
       <Route path="/KnowledgeManage" element={<KnowledgeManage />} />
+      <Route path="/knowledgeRoute" element={<KnowledgeRoute />} />
     </Routes>
 
   );

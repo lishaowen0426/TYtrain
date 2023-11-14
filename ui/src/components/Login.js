@@ -21,7 +21,7 @@ const Login = () => {
         e.preventDefault();
         // 这里只是一个模拟登录操作。在真实的应用中，您可能需要与后端验证。
         if (formData.username && formData.password) {
-            fetch("http://127.0.0.1:8010/api/login", {
+            fetch("http://127.0.0.1:3033/auth/login", {
                 method: "POST",
                 headers: {
                     "Content-Type": "application/json",
