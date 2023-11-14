@@ -1,9 +1,12 @@
 module.exports = {
   content: ["./src/**/*.{html,js}", "./public/index.html"],
+  important: true,
   theme: {
     colors: {
       transparent: "transparent",
       current: "currentColor",
+      black: "#000000",
+      white: "#ffffff",
       sky: {
         50: "#f0f9ff",
         100: "#e0f2fe",
@@ -25,6 +28,57 @@ module.exports = {
       4: "24px",
       5: "32px",
       6: "48px",
+    },
+    padding: {
+      1: "8px",
+      2: "12px",
+      3: "16px",
+      4: "24px",
+      5: "32px",
+      6: "48px",
+    },
+    fontFamily: {
+      ty: [
+        "Hiragino Sans GB",
+        "Microsoft YaHei",
+        "WenQuanYi Micro Hei",
+        "sans-serif",
+      ],
+    },
+    borderWidth: {
+      DEFAULT: "1px",
+      0: "0",
+      2: "2px",
+      3: "3px",
+      4: "4px",
+      6: "6px",
+      8: "8px",
+    },
+    borderRadius: {
+      DEFAULT: "0.25rem",
+      none: "0",
+      sm: "0.125rem",
+      md: "0.375rem",
+      lg: "0.5rem",
+      full: "9999px",
+    },
+    fontSize: {
+      "2xl": [
+        "1.5rem",
+        {
+          lineHeight: "2rem",
+          letterSpacing: "-0.01em",
+          fontWeight: "500",
+        },
+      ],
+      "3xl": [
+        "1.875rem",
+        {
+          lineHeight: "2.25rem",
+          letterSpacing: "-0.02em",
+          fontWeight: "700",
+        },
+      ],
     },
     extends: {},
   },
