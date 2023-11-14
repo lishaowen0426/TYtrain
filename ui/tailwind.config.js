@@ -1,5 +1,9 @@
 module.exports = {
-  content: ["./src/**/*.{html,js}", "./public/index.html"],
+  content: [
+    "./src/**/*.{html,js}",
+    "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
+    "./public/index.html",
+  ],
   important: true,
   theme: {
     colors: {
@@ -22,20 +26,20 @@ module.exports = {
       },
     },
     spacing: {
-      1: "8px",
-      2: "12px",
-      3: "16px",
-      4: "24px",
-      5: "32px",
-      6: "48px",
+      1: "1rem",
+      2: "1.5rem",
+      3: "2rem",
+      4: "2.5rem",
+      5: "3rem",
+      6: "3.5rem",
     },
     padding: {
-      1: "8px",
-      2: "12px",
-      3: "16px",
-      4: "24px",
-      5: "32px",
-      6: "48px",
+      1: "1rem",
+      2: "1.5rem",
+      3: "2rem",
+      4: "2.5rem",
+      5: "3rem",
+      6: "3.5rem",
     },
     fontFamily: {
       ty: [
@@ -46,20 +50,17 @@ module.exports = {
       ],
     },
     borderWidth: {
-      DEFAULT: "1px",
-      0: "0",
-      2: "2px",
-      3: "3px",
-      4: "4px",
-      6: "6px",
-      8: "8px",
+      0: "0.125rem",
+      1: "0.25rem",
+      2: "0.375rem",
+      3: "0.5rem",
     },
     borderRadius: {
-      DEFAULT: "0.25rem",
+      0: "0.125rem",
+      1: "0.25rem",
+      2: "0.375rem",
+      3: "0.5rem",
       none: "0",
-      sm: "0.125rem",
-      md: "0.375rem",
-      lg: "0.5rem",
       full: "9999px",
     },
     fontSize: {
