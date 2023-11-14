@@ -1,5 +1,7 @@
 build/
 dist/
 node_modules/
-static/
+.vs/
+static/**
 .DS_Store
+

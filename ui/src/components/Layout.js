@@ -54,6 +54,12 @@ const Layout = ({ children }) => {
                     knowledge
                   </button>
                 <button 
+                    className={`menu-btn ${selectedMenu === 'knowledgeRoute' ? 'active' : ''}`}
+                    onClick={() => navigateTo('/knowledgeRoute')}
+                  >
+                    knowledgeRoute
+                  </button>
+                  <button 
                     className={`menu-btn ${selectedMenu === 'interview' ? 'active' : ''}`}
                     onClick={() => navigateTo('/interview')}
                   >

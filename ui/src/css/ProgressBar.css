@@ -1,0 +1,13 @@
+.progress {
+    height: 25px; /* 设置进度条的高度 */
+    background-color: #e0e0de; /* 进度条的底色 */
+    border-radius: 5px; /* 进度条的圆角 */
+    box-shadow: inset 0 1px 3px rgba(0, 0, 0, .2); /* 进度条内阴影效果，可选 */
+  }
+  
+  .progress-bar {
+    font-weight: bold; /* 文本加粗，可选 */
+    line-height: 25px; /* 调整行高以垂直居中文本 */
+    color: white; /* 设置进度条内文本颜色 */
+  }
+  
