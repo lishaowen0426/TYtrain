@@ -13,7 +13,6 @@ import KnowledgeImport from "./components/KnowledgeImport";
 import KnowledgeRoute from "./components/KnowledgeRoute";
 import Interview from "./components/interview";
 import KnowledgeManage from "./components/KnowledgeManage";
-import { CssBaseline, ThemeProvider } from "@mui/material";
 import Homepage from "./components/Homepage";
 import "animate.css";
 import "./css/Register.css";
@@ -22,6 +21,7 @@ import { CookiesProvider, useCookies } from "react-cookie";
 import Dashboard from "./components/dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { TySubmitButton } from "./components/TyButton";
+import { TyInputText } from "./components/TyInput";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -40,7 +40,14 @@ function App() {
 function Root() {
   return (
     <Routes>
-      <Route path="/button" element={<TySubmitButton>提交</TySubmitButton>} />
+      <Route
+        path="/button"
+        element={<TySubmitButton className="">提交提价提交</TySubmitButton>}
+      />
+      <Route
+        path="/input"
+        element={<TyInputText name="lastname" id="lastname" placeholder="姓" />}
+      />
       <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />

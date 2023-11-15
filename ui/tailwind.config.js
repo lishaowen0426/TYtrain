@@ -4,7 +4,6 @@ module.exports = {
     "./node_modules/primereact/**/*.{js,ts,jsx,tsx}",
     "./public/index.html",
   ],
-  important: true,
   theme: {
     colors: {
       transparent: "transparent",
@@ -34,6 +33,7 @@ module.exports = {
       6: "3.5rem",
     },
     padding: {
+      0: "0rem",
       1: "1rem",
       2: "1.5rem",
       3: "2rem",
@@ -81,6 +81,19 @@ module.exports = {
         },
       ],
     },
-    extends: {},
+    fontWeight: {
+      thin: "100",
+      hairline: "100",
+      extralight: "200",
+      light: "300",
+      normal: "400",
+      medium: "500",
+      semibold: "600",
+      bold: "700",
+      extrabold: "800",
+      "extra-bold": "800",
+      black: "900",
+    },
+    extend: {},
   },
 };
