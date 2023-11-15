@@ -20,12 +20,13 @@ import "./App.css";
 import { CookiesProvider, useCookies } from "react-cookie";
 import Dashboard from "./components/dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { TySubmitButton, TyIconButton } from "./components/TyButton";
+import { TySubmitButton, TyIconButton, TyNavi } from "./components/TyButton";
 import { TyInputTextBorderNone } from "./components/TyInput";
 import { TyFormCheckBox } from "./components/TyCheckbox";
 import { TyFormInputBox } from "./components/TyInputBox";
 import { TyFormSelectBox } from "./components/TySelectBox";
 import { TyLayoutDashboardSidebar } from "./components/TySideBar";
+import { TyContainer } from "./components/TyContainer";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
@@ -74,6 +75,7 @@ function Root() {
         path="/button"
         element={<TySubmitButton className="">提交提价提交</TySubmitButton>}
       />
+      <Route path="/c" element={<TyContainer />} />
       <Route
         path="/input"
         element={
@@ -124,6 +126,7 @@ function Root() {
       />
 
       <Route path="/" element={<Homepage />} />
+      <Route path="/navi" element={<TyNavi />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
       <Route path="/register" element={<RegisterAndLogin />} />
