@@ -20,8 +20,8 @@ import "./App.css";
 import { CookiesProvider, useCookies } from "react-cookie";
 import Dashboard from "./components/dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { TySubmitButton } from "./components/TyButton";
-import { TyInputText } from "./components/TyInput";
+import { TySubmitButton, TyIconButton } from "./components/TyButton";
+import { TyInputTextBorderNone } from "./components/TyInput";
 import { TyFormCheckBox } from "./components/TyCheckbox";
 import { TyFormInputBox } from "./components/TyInputBox";
 import { TyFormSelectBox } from "./components/TySelectBox";
@@ -76,7 +76,13 @@ function Root() {
       />
       <Route
         path="/input"
-        element={<TyInputText name="lastname" id="lastname" placeholder="姓" />}
+        element={
+          <TyInputTextBorderNone
+            name="lastname"
+            id="lastname"
+            placeholder="姓"
+          />
+        }
       />
       <Route
         path="/Sidebar"
@@ -87,6 +93,7 @@ function Root() {
         }
       />
       <Route path="/button" element={<TySubmitButton>提交</TySubmitButton>} />
+      <Route path="/icon" element={<TyIconButton />} />
       <Route path="/CheckBox" element={<TyFormCheckBox></TyFormCheckBox>} />
       <Route
         path="/InputBox"
