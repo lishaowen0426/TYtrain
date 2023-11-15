@@ -22,10 +22,40 @@ import Dashboard from "./components/dashboard";
 import "bootstrap/dist/css/bootstrap.min.css";
 import { TySubmitButton } from "./components/TyButton";
 import { TyInputText } from "./components/TyInput";
+import { TyFormCheckBox } from "./components/TyCheckbox";
+import { TyFormInputBox } from "./components/TyInputBox";
+import { TyFormSelectBox } from "./components/TySelectBox";
+import { TyLayoutDashboardSidebar } from "./components/TySideBar";
 
 const router = createBrowserRouter([{ path: "*", Component: Root }]);
 
 const Tail = () => <h1 className="text-style font-ty">欢迎光临</h1>;
+
+const validateInput = value => {
+  if (!value) return "This field is required";
+  // Add more validation logic as needed
+  return "";
+};
+
+const menuItems = [
+  {
+    name: "Dashboard",
+    href: "#dashboard",
+    children: [
+      { name: "Submenu 1", href: "#submenu1" },
+      { name: "Submenu 2", href: "#submenu2" },
+    ],
+  },
+  {
+    name: "Reports",
+    href: "#reports",
+    children: [
+      { name: "Report 1", href: "#report1" },
+      { name: "Report 2", href: "#report2" },
+    ],
+  },
+  // More menus...
+];
 
 function App() {
   return (
@@ -48,6 +78,44 @@ function Root() {
         path="/input"
         element={<TyInputText name="lastname" id="lastname" placeholder="姓" />}
       />
+      <Route
+        path="/Sidebar"
+        element={
+          <TyLayoutDashboardSidebar
+            menus={menuItems}
+          ></TyLayoutDashboardSidebar>
+        }
+      />
+      <Route path="/button" element={<TySubmitButton>提交</TySubmitButton>} />
+      <Route path="/CheckBox" element={<TyFormCheckBox></TyFormCheckBox>} />
+      <Route
+        path="/InputBox"
+        element={
+          <TyFormInputBox
+            id="myInput"
+            label="test"
+            placeholder=" "
+            layout="horizontal"
+            validate={validateInput}
+          />
+        }
+      />
+      <Route
+        path="/SelectBox"
+        element={
+          <TyFormSelectBox
+            id="mySelect"
+            label="SelectOption"
+            options={[
+              { value: "option1", label: "Option 1" },
+              { value: "option2", label: "Option 2" },
+              // ... more options
+            ]}
+            layout="horizontal"
+          />
+        }
+      />
+
       <Route path="/" element={<Homepage />} />
       <Route path="/login" element={<Login />} />
       <Route path="/dashboard" element={<Dashboard />} />
