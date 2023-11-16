@@ -60,7 +60,7 @@ const menuItems = [
 
 function App() {
   useEffect = () => {
-    document.body.style.background = "#e6e6e7";
+    document.body.style.background = "#f5f5f6";
   };
 
   return (

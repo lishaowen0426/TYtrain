@@ -29,6 +29,7 @@ const TyDownArrow = () => {
 };
 
 const TyNaviIcon = ({ children, ml, ...props }) => {
+  console.log(ml);
   return (
     <svg
       className={"basis-sm h-sm self-center "}
@@ -43,6 +44,7 @@ const TyNaviIcon = ({ children, ml, ...props }) => {
   );
 };
 
+const indentation = 20;
 export const TyIconButton = ({ children, svg, content, ml = 10, ...props }) => {
   const arrayChildren = React.Children.toArray(children);
 
@@ -68,8 +70,8 @@ export const TyIconButton = ({ children, svg, content, ml = 10, ...props }) => {
         {children ? <TyDownArrow /> : undefined}
       </button>
       {expand
-        ? React.Children.map(arrayChildren, (children, index) => {
-            return;
+        ? arrayChildren.map(c => {
+            return renderButton(c.props, ml + indentation);
           })
         : undefined}
     </div>
@@ -110,15 +112,24 @@ const cash = (
   />
 );
 
-const indentation = 20;
+const homework = (
+  <path
+    stroke="currentColor"
+    stroke-linecap="round"
+    stroke-linejoin="round"
+    stroke-width="2"
+    d="M10 16.5c0-1-8-2.7-9-2V1.8c1-1 9 .707 9 1.706M10 16.5V3.506M10 16.5c0-1 8-2.7 9-2V1.8c-1-1-9 .707-9 1.706"
+  />
+);
 
 const renderButton = ({ svg, content, children }, ml) => {
+  const childArray = React.Children.toArray(children);
   return (
-    <TyIconButton svg={svg} content={content} ml={ml}>
-      {children.map(c => {
-        renderButton(c, ml + indentation);
-      })}
-    </TyIconButton>
+    <div>
+      <TyIconButton svg={svg} content={content} ml={ml}>
+        {children}
+      </TyIconButton>
+    </div>
   );
 };
 
@@ -128,12 +139,14 @@ export const TyNavi = props => {
   const handleExpand = event => {};
 
   return (
-    <div className="box-border border-solid border-r-[2px] border-r-jumbo-200 flex flex-col w-[13%] bg-jumbo-50 ">
+    <div className="box-border border-solid border-r-[2px] border-r-jumbo-200 flex flex-col w-[15%] bg-jumbo-100 ">
       <TyIconButton svg={calendar} content="日历">
-        <TyIconButton svg={course} content="课程" />
+        <TyIconButton svg={course} content="课程">
+          <TyIconButton svg={home} content="我的" />
+        </TyIconButton>
         <TyIconButton svg={cash} content="充值" />
       </TyIconButton>
-      <TyIconButton svg={home} content="我的" />
+      <TyIconButton svg={homework} content="作业" />
     </div>
   );
 };
