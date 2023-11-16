@@ -1,3 +1,7 @@
-html {
+:root {
     font-size: 16px;
+}
+
+.canvas-color {
+    background-color: theme(colors.jumbo.200);
 }

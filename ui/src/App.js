@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import {
   createBrowserRouter,
   RouterProvider,
@@ -59,6 +59,10 @@ const menuItems = [
 ];
 
 function App() {
+  useEffect = () => {
+    document.body.style.background = "#e6e6e7";
+  };
+
   return (
     <React.Fragment>
       <CookiesProvider>

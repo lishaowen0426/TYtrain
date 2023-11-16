@@ -24,6 +24,7 @@ module.exports = {
         950: "#082f49",
       },
       jumbo: {
+        0: "#fbfbfb",
         50: "#f5f5f6",
         100: "#e6e6e7",
         200: "#cfcfd2",
@@ -38,6 +39,7 @@ module.exports = {
       },
     },
     spacing: {
+      sm: "0.8rem",
       1: "1rem",
       2: "1.5rem",
       3: "2rem",
@@ -79,10 +81,26 @@ module.exports = {
       full: "9999px",
     },
     fontSize: {
+      sm: [
+        "0.8rem",
+        {
+          lineHeight: "1",
+          letterSpacing: "-0.01em",
+          fontWeight: "500",
+        },
+      ],
+      md: [
+        "1rem",
+        {
+          lineHeight: "1",
+          letterSpacing: "-0.01em",
+          fontWeight: "500",
+        },
+      ],
       "2xl": [
         "1.5rem",
         {
-          lineHeight: "2rem",
+          lineHeight: "1",
           letterSpacing: "-0.01em",
           fontWeight: "500",
         },
@@ -90,7 +108,7 @@ module.exports = {
       "3xl": [
         "1.875rem",
         {
-          lineHeight: "2.25rem",
+          lineHeight: "1",
           letterSpacing: "-0.02em",
           fontWeight: "700",
         },
